@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: wpoms_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: wpoms-dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: https://github.com/jerinthomascarmel/wpoms-admin-starter.git
+      dockerfile: Dockerfile
+    container_name: wpoms_admin
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: https://github.com/jerinthomascarmel/wpoms-web-starter.git
+      dockerfile: Dockerfile
+    container_name: wpoms_web
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
