@@ -10,7 +10,7 @@ provider "aws" {
 }
 
 variable "ecr_repos" {
-  default = ["my-app-frontend", "my-app-backend"]
+  default = ["jerin/wpoms-web", "jerin/wpoms-admin"]
 }
 
 resource "aws_ecr_repository" "repos" {
