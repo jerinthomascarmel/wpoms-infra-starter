@@ -20,6 +20,5 @@ resource "aws_ecr_repository" "repos" {
 }
 
 output "repo_urls" {
-  for_each = toset(var.ecr_repos)
-  value = aws_ecr_repository.repos[each.value].repository_url
+  value = { for name, repo in aws_ecr_repository.repos : name => repo.repository_url }
 }
