@@ -20,9 +20,14 @@ resource "aws_ecr_repository" "repos" {
   image_tag_mutability = "MUTABLE"
 }
 
-resource "aws_ecr_repository" "new_repo" {
-  name = "jerin/new"
-} 
+resource "aws_ami_copy" "ec2" {
+  name              = "terraform-jerin-ec2"
+  source_ami_id     = "ami-05d62b9bc5a6ca605"
+
+  tags = {
+    Name = "terraform-jerin-ec2"
+  }
+}
 
 output "repo_urls" {
   value = { for name, repo in aws_ecr_repository.repos : name => repo.repository_url }
