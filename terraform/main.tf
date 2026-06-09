@@ -61,7 +61,7 @@ resource "aws_security_group" "terraform_jt_sg" {
 
 resource "aws_instance" "terraform-jerin-ec2" {
   ami                    = "ami-05d62b9bc5a6ca605"
-  instance_type          = "t2.micro"
+  instance_type          = "t3.micro"
   subnet_id              = data.aws_subnets.default.ids[0]
   vpc_security_group_ids = [aws_security_group.terraform_jt_sg.id]
   key_name = "jt_ec2"
