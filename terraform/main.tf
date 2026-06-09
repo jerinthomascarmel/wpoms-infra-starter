@@ -20,15 +20,56 @@ resource "aws_ecr_repository" "repos" {
   image_tag_mutability = "MUTABLE"
 }
 
-resource "aws_ami_copy" "ec2" {
-  name              = "terraform-jerin-ec2"
-  source_ami_id     = "ami-05d62b9bc5a6ca605"
-  source_ami_region = "eu-north-1"
 
-  tags = {
-    Name = "terraform-jerin-ec2"
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
   }
 }
+
+resource "aws_security_group" "terraform_jt_sg" {
+  name        = "terraform-ec2-sg"
+  description = "Allow SSH access"
+  vpc_id      = data.aws_vpc.default.id
+
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "terraform-ec2-sg"
+  }
+}
+
+resource "aws_instance" "terraform-jerin-ec2" {
+  ami                    = "ami-05d62b9bc5a6ca605"
+  instance_type          = "t2.micro"
+  subnet_id              = data.aws_subnets.default.ids[0]
+  vpc_security_group_ids = [aws_security_group.terraform_jt_sg.id]
+  key_name = "jt_ec2"
+  tags = {
+    Name = "terraform-ec2"
+  }
+}
+
 
 output "repo_urls" {
   value = { for name, repo in aws_ecr_repository.repos : name => repo.repository_url }
