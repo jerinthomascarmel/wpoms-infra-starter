@@ -16,7 +16,7 @@ resource "aws_security_group" "terraform_jt_sg" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "inbound" {
-  for_each = set(var.inbound_rules)
+  for_each = var.inbound_rules
 
   security_group_id = aws_security_group.terraform_jt_sg.id
   cidr_ipv4         = each.value.cidr_ipv4

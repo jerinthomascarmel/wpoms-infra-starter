@@ -5,6 +5,6 @@ output "ecr_repo_urls" {
 output "terraform-jerin-ec2-details" {
   value = {
     public_ip = aws_instance.terraform-jerin-ec2.public_ip
-    dns_name  = aws_instance.terraform-jerin-ec2.public_dns_name
+    dns_name  = aws_instance.terraform-jerin-ec2.public_dns
   }
 }
