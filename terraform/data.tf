@@ -12,7 +12,7 @@ data "aws_subnets" "default" {
 
 data "aws_ami" "ubuntu_ami" {
   most_recent = true
-  owners      = ["self"] 
+  owners      = ["099720109477"] 
 
   filter {
     name   = "name"
