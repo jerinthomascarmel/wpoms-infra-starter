@@ -40,6 +40,8 @@ resource "aws_instance" "terraform-jerin-ec2" {
   vpc_security_group_ids = [aws_security_group.terraform_jt_sg.id]
   associate_public_ip_address = true
   key_name = "jt_ec2"
+  user_data = file("${path.module}/user_data.sh")
+  user_data_replace_on_change = true
   tags = {
     Name = "terraform-ec2"
   }
