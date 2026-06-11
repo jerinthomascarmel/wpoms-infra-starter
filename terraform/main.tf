@@ -8,7 +8,7 @@ resource "aws_ecr_repository" "repos" {
 resource "aws_security_group" "terraform_jt_sg" {
   name        = "terraform jt security group"
   description = "Allow HTTP , HTTPS , SSH Access and all outbout access"
-  vpc_id      = aws_vpc.default.id
+  vpc_id      = data.aws_vpc.default.id
 
   tags = {
     Name = "terraform_jt_sg"
