@@ -34,14 +34,17 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
+          # Get the version tag of images 
+          BACKEND_IMAGE_TAG=$(bash scripts/generate-image-version.sh $ECR_BACKEND_REPO)
+          FRONTEND_IMAGE_TAG=$(bash scripts/generate-image-version.sh $ECR_FRONTEND_REPO)
+          echo "Backend tag: $BACKEND_IMAGE_TAG"
+          echo "Frontend tag: $FRONTEND_IMAGE_TAG"
+
+
           # Build the docker container
           docker compose build backend 
           docker compose build frontend 
 
-          BACKEND_IMAGE_TAG=$(bash scripts/generate-image-version.sh $ECR_BACKEND_REPO)
-          FRONTEND_IMAGE_TAG=$(bash scripts/generate-image-version.sh $ECR_FRONTEND_REPO)
-
-          echo BACKEND_IMAGE_TAG FRONTEND_IMAGE_TAG
 
           # tag the docker images
           docker tag wpoms_admin:latest $ECR_REGISTRY/$ECR_BACKEND_REPO:$BACKEND_IMAGE_TAG

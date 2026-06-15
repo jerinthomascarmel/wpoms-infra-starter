@@ -14,4 +14,5 @@ IMAGE_COUNT=$(aws ecr describe-images \
   --query 'length(imageDetails)' \
   --output text)
 
-echo "v$IMAGE_COUNT"
+VERSION=$(($IMAGE_COUNT + 1))
+echo "v$VERSION"
