@@ -38,8 +38,8 @@ jobs:
           docker compose build backend 
           docker compose build frontend 
 
-          BACKEND_IMAGE_TAG=$(./scripts/generate-image-version.sh $ECR_BACKEND_REPO)
-          FRONTEND_IMAGE_TAG=$(./scripts/generate-image-version.sh $ECR_FRONTEND_REPO)
+          BACKEND_IMAGE_TAG=$(bash scripts/generate-image-version.sh $ECR_BACKEND_REPO)
+          FRONTEND_IMAGE_TAG=$(bash scripts/generate-image-version.sh $ECR_FRONTEND_REPO)
 
           echo BACKEND_IMAGE_TAG FRONTEND_IMAGE_TAG
 
