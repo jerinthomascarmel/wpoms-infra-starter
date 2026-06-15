@@ -28,3 +28,27 @@ jobs:
       - name: Login to Amazon ECR (to get ecr uri)
         id: login-ecr 
         uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, Tag, and Push Images to ECR
+        id: build-images
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }} # Uses the commit hash as the unique image tag
+        run: |
+          # Build the docker container
+          docker compose build backend 
+          docker compose build frontend 
+
+          # tag the docker images
+          docker tag wpoms_admin:latest $ECR_REGISTRY/$ECR_BACKEND_REPO:$IMAGE_TAG
+          docker tag wpoms_web:latest $ECR_REGISTRY/$ECR_FRONTEND_REPO:$IMAGE_TAG
+
+          # Also tag it as 'latest' so the EC2 script can always pull the newest version easily
+          docker tag wpoms_admin:latest $ECR_REGISTRY/$ECR_BACKEND_REPO:latest
+          docker tag wpoms_web:latest $ECR_REGISTRY/$ECR_FRONTEND_REPO:latest
+          
+          # Push both tags to ECR
+          docker push $ECR_REGISTRY/$ECR_BACKEND_REPO:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_FRONTEND_REPO:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_BACKEND_REPO:latest
+          docker push $ECR_REGISTRY/$ECR_FRONTEND_REPO:latest

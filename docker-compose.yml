@@ -16,6 +16,7 @@ services:
     build:
       context: https://github.com/jerinthomascarmel/wpoms-admin-starter.git
       dockerfile: Dockerfile
+    image: wpoms_admin:latest
     container_name: wpoms_admin
     restart: always
     ports:
@@ -27,6 +28,7 @@ services:
     build:
       context: https://github.com/jerinthomascarmel/wpoms-web-starter.git
       dockerfile: Dockerfile
+    image: wpoms_web:latest
     container_name: wpoms_web
     restart: always
     ports:
